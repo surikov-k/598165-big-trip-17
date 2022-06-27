@@ -37,12 +37,10 @@ const generateDestinationDescription = (name) => `${name}, ${Array
     length: getRandomInteger(2, 5)
   }, () => descriptionPart.next().value).join(', ')}.`;
 
-const genertatePictures = (destinationName) => {
-  return Array.from({length: getRandomInteger(0, 5)}, () => ({
-    src: `http://picsum.photos/300/200?r=${Math.random()}`,
-    description: `${destinationName} ${getRandomFromArray(pictureDescriptionParts)}`
-  }));
-};
+const genertatePictures = (destinationName) => Array.from({length: getRandomInteger(0, 5)}, () => ({
+  src: `http://picsum.photos/300/200?r=${Math.random()}`,
+  description: `${destinationName} ${getRandomFromArray(pictureDescriptionParts)}`
+}));
 
 const generateDestination = () => ({
   name: getRandomFromArray(destinationNames),
@@ -67,7 +65,7 @@ function* generateDate() {
     now = next;
     yield next;
   }
-};
+}
 
 const date = generateDate();
 
@@ -86,15 +84,17 @@ const getOffers = (type) => {
     .map((it) => it.id);
 };
 
-export const generatePoint = () => ({
-  basePrice: generatePrice(),
-  dateFrom: date.next().value,
-  dateTo: date.next().value,
-  destination: generateDestination(),
-  id: id.next().value.toString(),
-  isFavorite: Boolean(getRandomInteger()),
-  get offers() {
-    return getOffers(this.type);
-  },
-  type: getRandomFromArray(offersTypes)
-});
+export const generatePoint = () => {
+  const type = getRandomFromArray(offersTypes);
+  const pointOffers = getOffers(type);
+  return ({
+    basePrice: generatePrice(),
+    dateFrom: date.next().value,
+    dateTo: date.next().value,
+    destination: generateDestination(),
+    id: id.next().value.toString(),
+    isFavorite: Boolean(getRandomInteger()),
+    offers: pointOffers,
+    type,
+  });
+};

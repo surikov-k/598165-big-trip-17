@@ -9,6 +9,7 @@ const createPictures = (pictures) => `
     </div>`;
 
 const createOffers = (point, offers) => {
+
   if (!point.offers.length) {
     return '';
   }
@@ -17,7 +18,7 @@ const createOffers = (point, offers) => {
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
     <div class="event__available-offers">
-      ${offers.offers.map((offer) => `
+      ${offers.map((offer) => `
         <div class="event__offer-selector">
           <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${point.offers.includes(offer.id) && 'checked'}>
           <label class="event__offer-label" for="event-offer-luggage-1">
@@ -150,24 +151,25 @@ const createTemplate = (point, offers) => {
 export default class EditView {
   #point = null;
   #typeOffers = null;
+  #element = null;
 
   constructor(point, typeOffers) {
     this.#point = point;
     this.#typeOffers = typeOffers;
   }
 
-  getTemplate() {
+  get template() {
     return createTemplate(this.#point, this.#typeOffers);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

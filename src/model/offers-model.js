@@ -6,15 +6,14 @@ export default class OffersModel {
   }
 
   getOffers(point) {
-    const {offers: offersIds} = point;
-
+    const offersIds = point.offers;
     const typeOffers = this.getOffersByType(point.type);
 
     if (!typeOffers) {
       return [];
     }
 
-    return typeOffers.offers.reduce((acc, offer) => {
+    return typeOffers.reduce((acc, offer) => {
       if (offersIds.includes(offer.id)) {
         acc.push(offer);
       }
@@ -23,6 +22,6 @@ export default class OffersModel {
   }
 
   getOffersByType(type) {
-    return this.#offers.find((offer) => offer.type === type);
+    return this.#offers.find((offer) => offer.type === type).offers;
   }
 }

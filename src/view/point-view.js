@@ -1,14 +1,12 @@
 import {createElement} from '../render';
 import {formatDay, formatDuration, formatTime} from '../utils';
 
-const createOffers = (offers) => {
-  return offers.map((offer) => `
+const createOffers = (offers) => offers.map((offer) => `
     <li class="event__offer">
       <span class="event__offer-title">${offer.title}</span>
       &plus;&euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
     </li>
 `).join('\n');
-};
 
 const createTemplate = (point, offers) => {
   const {dateFrom, dateTo, type, destination, basePrice, isFavorite,} = point;
@@ -49,27 +47,28 @@ const createTemplate = (point, offers) => {
   </li>`;
 };
 
-export default class EventView {
+export default class PointView {
   #point = null;
   #offers = null;
+  #element = null;
 
   constructor(point, offers) {
     this.#point = point;
     this.#offers = offers;
   }
 
-  getTemplate() {
+  get template() {
     return createTemplate(this.#point, this.#offers);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }
