@@ -4,6 +4,7 @@ import ListView from '../view/list-view';
 import PointView from '../view/point-view';
 import {render} from '../render';
 import EditView from '../view/edit-view';
+import NoPointsView from '../view/no-points-view';
 
 export default class BoardPresenter {
   #view = new BoardView();
@@ -18,23 +19,30 @@ export default class BoardPresenter {
     this.#offersModel = offersModel;
 
     this.#points = [...this.#pointsModel.points];
+    this.#points = [];
 
     render(this.#view, this.container);
     render(
       new SortView(),
       this.#view.element.querySelector('.trip-events'));
 
-    this.#listView = new ListView();
+    if (!this.#points.length) {
+      render(new NoPointsView(), this.#view.element.querySelector('.trip-events'));
+    } else {
 
-    render(
-      this.#listView,
-      this.#view.element.querySelector('.trip-events')
-    );
+      this.#listView = new ListView();
 
-    this.#points.forEach((point) => {
-      this.#renderPoint(point);
-    });
+      render(
+        this.#listView,
+        this.#view.element.querySelector('.trip-events')
+      );
+
+      this.#points.forEach((point) => {
+        this.#renderPoint(point);
+      });
+    }
   }
+
 
   #renderPoint(point) {
 
